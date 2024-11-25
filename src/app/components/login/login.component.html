@@ -1,0 +1,46 @@
+<body>
+
+
+<div class="login-container">
+  <div class="brand-logo">
+    <img src="../../../assets/image/logo.jpg" alt="logo" />
+    <h1>Open Work</h1>
+  </div>
+
+  <div class="login-card">
+    <!-- Pestañas -->
+    <div class="tab">
+      <button class="tab-button" [class.active]="isLogin" (click)="toggleView(true)">Iniciar Sesión</button>
+      <button class="tab-button" [class.active]="!isLogin" (click)="toggleView(false)">Registrarse</button>
+    </div>
+
+    <!-- Vista de Login -->
+    <div *ngIf="isLogin">
+      <h2>Bienvenido de nuevo</h2>
+      <form (ngSubmit)="onLoginSubmit()">
+        <input type="email" [(ngModel)]="email" name="email" required placeholder="Correo electrónico" />
+        <input type="password" [(ngModel)]="password" name="password" required placeholder="Contraseña" />
+        <button type="submit" class="login-button">Iniciar Sesión</button>
+      </form>
+      <p>¿No tienes una cuenta? <a (click)="toggleView(false)">Regístrate</a></p>
+    </div>
+
+    <!-- Vista de Sign Up -->
+    <div *ngIf="!isLogin">
+      <h2>Crea una nueva cuenta</h2>
+      <form (ngSubmit)="onSignUpSubmit()">
+        <input type="text" [(ngModel)]="firstName" name="firstName" required placeholder="Nombre" />
+        <input type="text" [(ngModel)]="lastName" name="lastName" required placeholder="Apellido" />
+        <input type="text" [(ngModel)]="phone" name="phone" required placeholder="Télefono" />
+        <input type="text" [(ngModel)]="dni" name="dni" required placeholder="DNI" />
+        <input type="email" [(ngModel)]="email" name="email" required placeholder="Correo electrónico" />
+        <input type="password" [(ngModel)]="password" name="password" required placeholder="Contraseña" />
+        <input type="date" [(ngModel)]="dob" name="dob" required placeholder="Fecha de nacimiento" />
+        <button type="submit" class="signup-button">Registrarse</button>
+      </form>
+      <p>¿Ya tienes una cuenta? <a (click)="toggleView(true)">Inicia sesión</a></p>
+    </div>
+  </div>
+</div>
+</body>
+<!-- ORIGINAL -->

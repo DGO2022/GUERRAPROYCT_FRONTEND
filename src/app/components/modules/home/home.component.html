@@ -1,0 +1,117 @@
+<!-- Decorative Web Fonts-based Icon -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<!-- Header -->
+<header class="header">
+  <div class="logo">
+    <img src="../../../assets/image/logo.jpg" alt="logo">
+    <h1>Open Work</h1>
+  </div>
+  <div class="header-icons">
+    <button class="notification-btn" (click)="toggleNotifications()">🔔</button>
+    <button class="profile-btn" (click)="toggleMenu()">👤</button>
+
+    <!-- Menú desplegable -->
+    <div class="profile-menu" *ngIf="isMenuOpen">
+      <button (click)="logout()">Perfil</button>
+      <button (click)="logout()">Configuración</button>
+      <button (click)="logout()">Ayuda</button>
+      <button (click)="logout()">Cerrar sesión</button>
+      <!-- Otras opciones pueden ir aquí -->
+    </div>
+  </div>
+</header>
+
+
+<!-- Notificaciones -->
+<div class="notifications" *ngIf="isNotificationsOpen">
+  <div class="notifications-header">
+    <h3>Notificaciones</h3>
+    <button class="close-notifications-btn" (click)="toggleNotifications()">×</button>
+  </div>
+  <div class="notification-item" *ngFor="let notification of notifications">
+    <div class="notification-profile">
+      <img [src]="notification.usuario.imagen" alt="Profile" class="notification-img">
+      <div>
+        <p class="notification-name">{{ notification.usuario.nombre }}</p>
+        <p class="notification-detail">{{ notification.detalle }}</p>
+      </div>
+    </div>
+    <p class="notification-time">{{ notification.time }}</p>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main-content">
+  <!-- Image -->
+  <div class="main-image">
+    <img src="../../../../assets/image/electricidad.png" alt="Main" class="main-img">
+  </div>
+
+  <!-- Categories -->
+  <div class="categories">
+    <button class="category-btn">Todos</button>
+    <button class="category-btn">Gasfitería</button>
+    <button class="category-btn">Electricidad</button>
+    <button class="category-btn">Carpintería</button>
+  </div>
+
+  <!-- Lista de Trabajos -->
+  <div class="posts">
+    <div class="trabajo-card" *ngFor="let trabajo of trabajos">
+      <div class="trabajo-header">
+        <img [src]="" alt="Profile" class="profile-img">
+        <div>
+          <p class="name">{{ trabajo.usuario.nombre }}</p>
+          <p class="category">{{ trabajo.categoria.nombreCategoria }}</p>
+        </div>
+      </div>
+      <p class="detalle">{{ trabajo.detalle }}</p>
+      <img *ngIf="trabajo.imagen" [src]="" alt="Trabajo Image" class="trabajo-img">
+      <p class="time">19/11/2024</p>
+    </div>
+  </div>
+  <!-- ORIGINAL -->
+
+  <!-- Floating Button -->
+  <div class="floating-btn">
+    <button class="add-btn" (click)="openModal()">
+    <i class="fa-solid fa-plus"></i>
+    </button>
+  </div>
+
+  <!-- Modal para Nueva Publicación de Trabajo -->
+  <div class="modal" *ngIf="isModalOpen">
+    <div class="modal-content">
+      <span class="close-btn" (click)="closeModal()">&times;</span>
+      <h2>Crear Nueva Publicación de Trabajo</h2>
+      <h3>de </h3>
+      <div class="modal-body">
+
+        Seleccionar Usuario
+        <select [(ngModel)]="nuevoTrabajo.usuario.id_usuario" class="user-select" required>
+          <option [ngValue]="null" disabled>Seleccionar Usuario</option>
+          <option *ngFor="let usuario of usuarios" [ngValue]="usuario.id_usuario">
+            {{ usuario.nombre }}
+          </option>
+        </select>
+
+
+        <input type="text" placeholder="Detalle del Trabajo" [(ngModel)]="nuevoTrabajo.detalle" class="input-field"
+          required />
+
+
+
+        <!-- Seleccionar Categoría -->
+        <select [(ngModel)]="nuevoTrabajo.categoria.id_categoria" class="category-select" required>
+          <option [ngValue]="null" disabled>Seleccionar Categoría</option>
+          <option *ngFor="let categoria of categorias" [ngValue]="categoria.id_categoria">
+            {{ categoria.nombreCategoria }}
+          </option>
+        </select>
+
+        <button class="publish-btn" (click)="publicarTrabajo()">Publicar</button>
+      </div>
+    </div>
+  </div>
+<!-- ORIGINAL -->
