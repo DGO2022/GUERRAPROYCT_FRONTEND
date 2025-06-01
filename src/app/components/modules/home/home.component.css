@@ -237,6 +237,11 @@ body {
   color: #888;
 }
 
+.titulo {
+  font-size: 24px;
+  margin: 15px 0;
+}
+
 .detalle {
   font-size: 14px;
   margin: 15px 0;

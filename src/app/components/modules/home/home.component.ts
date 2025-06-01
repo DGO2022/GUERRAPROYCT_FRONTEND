@@ -13,6 +13,7 @@ import { Router } from '@angular/router'; //
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
+  keyword: string = '';
   trabajos: Trabajo[] = [];
   categorias: Categoria[] = [];
   usuarios: Usuario[] = [];
@@ -33,10 +34,11 @@ export class HomeComponent implements OnInit {
     },
     // Añade más notificaciones aquí
   ];
-
+  
   // Inicializar los datos del nuevo trabajo sin el campo cv
   nuevoTrabajo = {
-    detalle: '',
+    titulo: '',
+    detalle:'',
     usuario: { id_usuario: null },
     categoria: { id_categoria: null },
   };
@@ -64,6 +66,7 @@ export class HomeComponent implements OnInit {
   publicarTrabajo(): void {
     // Crear el objeto JSON para enviar al backend sin cv
     const trabajoData = {
+      titulo: this.nuevoTrabajo.titulo,
       detalle: this.nuevoTrabajo.detalle,
       usuario: { id_usuario: this.nuevoTrabajo.usuario.id_usuario },
       categoria: { id_categoria: this.nuevoTrabajo.categoria.id_categoria },
@@ -116,6 +119,7 @@ export class HomeComponent implements OnInit {
 
   private resetNuevoTrabajo(): void {
     this.nuevoTrabajo = {
+      titulo: '',
       detalle: '',
       usuario: { id_usuario: null },
       categoria: { id_categoria: null },
@@ -141,4 +145,22 @@ export class HomeComponent implements OnInit {
   toggleNotifications(): void {
     this.isNotificationsOpen = !this.isNotificationsOpen;
   }
+
+//METODO PARA BUSCAR TRABAJO CON BUSCADOR
+ buscarTrabajos(): void {
+   if (this.keyword.trim() === '') {
+     this.listarTrabajos(); // Trae todos si el campo está vacío
+   } else {
+     this.trabajoService.buscarTrabajos(this.keyword.trim()).subscribe(
+       (data) => {
+         this.trabajos = data; // Aquí se asigna la lista filtrada
+       },
+       (error) => {
+         console.error('Error al buscar trabajos', error);
+       }
+     );
+   }
+ }
+
+
 }

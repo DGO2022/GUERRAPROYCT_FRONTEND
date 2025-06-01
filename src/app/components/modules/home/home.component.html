@@ -48,6 +48,14 @@
     <img src="../../../../assets/image/electricidad.png" alt="Main" class="main-img">
   </div>
 
+
+  <div class="search-container">
+   <input type="text" [(ngModel)]="keyword" (keyup.enter)="buscarTrabajos()" />
+   <button (click)="buscarTrabajos()">Buscar</button>
+   <button (click)="keyword=''; buscarTrabajos()">Limpiar</button>
+  </div>
+
+
   <!-- Categories -->
   <div class="categories">
     <button class="category-btn">Todos</button>
@@ -66,6 +74,7 @@
           <p class="category">{{ trabajo.categoria.nombreCategoria }}</p>
         </div>
       </div>
+      <p class="titulo">{{ trabajo.titulo }}</p>
       <p class="detalle">{{ trabajo.detalle }}</p>
       <img *ngIf="trabajo.imagen" [src]="" alt="Trabajo Image" class="trabajo-img">
       <p class="time">19/11/2024</p>
@@ -97,8 +106,12 @@
         </select>
 
 
-        <input type="text" placeholder="Detalle del Trabajo" [(ngModel)]="nuevoTrabajo.detalle" class="input-field"
+        <input type="text" placeholder="Titulo del Trabajo" [(ngModel)]="nuevoTrabajo.titulo" class="input-field"
           required />
+
+        <!-- DETALLE -->
+        <input type="text" placeholder="detalle del Trabajo" [(ngModel)]="nuevoTrabajo.detalle" class="input-field"
+          required /> 
 
 
 

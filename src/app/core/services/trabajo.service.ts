@@ -30,4 +30,9 @@ export class TrabajoService {
   listarUsuarios(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(`${this.apiUrl}/usuario/listar`);
   }
+
+  //Buscar trabjo con buscador
+  buscarTrabajos(keyword: string): Observable<Trabajo[]> {
+  return this.http.get<Trabajo[]>(`${this.apiUrl}/trabajo/buscar?keyword=${keyword}`);
+  }
 }
