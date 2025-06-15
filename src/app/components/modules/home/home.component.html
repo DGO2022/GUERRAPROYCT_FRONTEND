@@ -3,25 +3,29 @@
 
 <!-- Header -->
 <header class="header">
-  <div class="logo">
-    <img src="../../../assets/image/logo.jpg" alt="logo">
-    <h1>Open Work</h1>
-  </div>
-  <div class="header-icons">
-    <button class="notification-btn" (click)="toggleNotifications()">🔔</button>
-    <button class="profile-btn" (click)="toggleMenu()">👤</button>
-
-    <!-- Menú desplegable -->
-    <div class="profile-menu" *ngIf="isMenuOpen">
-      <button (click)="logout()">Perfil</button>
-      <button (click)="logout()">Configuración</button>
-      <button (click)="logout()">Ayuda</button>
-      <button (click)="logout()">Cerrar sesión</button>
-      <!-- Otras opciones pueden ir aquí -->
+  <div class="header-content">
+    <div class="logo">
+      <img src="../../../assets/image/usuarioregistrado.jpg" alt="logo">
+      <h1>OPEN WORK</h1>
+    </div>
+    <nav class="main-nav">
+      <a class="nav-link active">Home</a>
+      <a class="nav-link">Publicar</a>
+      <a class="nav-link">Mis publicaciones</a>
+      <a class="nav-link">Ajustes</a>
+    </nav>
+    <div class="header-icons">
+      <button class="notification-btn" (click)="toggleNotifications()"><i class="fa-regular fa-bell"></i></button>
+      <button class="profile-btn" (click)="toggleMenu()"><i class="fa-regular fa-user"></i></button>
+      <div class="profile-menu" *ngIf="isMenuOpen">
+        <button (click)="logout()">Perfil</button>
+        <button (click)="logout()">Configuración</button>
+        <button (click)="logout()">Ayuda</button>
+        <button (click)="logout()">Cerrar sesión</button>
+      </div>
     </div>
   </div>
 </header>
-
 
 <!-- Notificaciones -->
 <div class="notifications" *ngIf="isNotificationsOpen">
@@ -41,90 +45,130 @@
   </div>
 </div>
 
-<!-- Main Content -->
-<main class="main-content">
-  <!-- Image -->
-  <div class="main-image">
-    <img src="../../../../assets/image/electricidad.png" alt="Main" class="main-img">
+<!-- Banner de Bienvenida -->
+<section class="banner">
+  <div class="banner-content">
+    <div class="banner-text">
+      <h2>Bienvenido a <span>Open Work</span></h2>
+      <p>Somos un lugar donde puedes ayudar y postular a trabajos cotidianos</p>
+      <button class="banner-btn">Postula a una publicación!</button>
+    </div>
+    <div class="banner-img">
+      <img src="../../../assets/image/nosotros.png" alt="Bienvenida">
+    </div>
   </div>
+</section>
 
-<!-- buscar nota de trabajo -->
-  <div class="search-container">
-   <input type="text" [(ngModel)]="keyword" (keyup.enter)="buscarTrabajos()" />
-   <button (click)="buscarTrabajos()">Buscar</button>
-   <button (click)="keyword=''; buscarTrabajos()">Limpiar</button>
+<!-- Filtros y Buscador -->
+<section class="filters-section">
+  <div class="filters-content">
+    <div class="search-container">
+      <input type="text" [(ngModel)]="keyword" (keyup.enter)="buscarTrabajos()" placeholder="Buscar trabajos..." />
+      <button (click)="buscarTrabajos()"><i class="fa-solid fa-magnifying-glass"></i></button>
+      <button (click)="keyword=''; buscarTrabajos()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="categories">
+      <button class="category-btn">Todos</button>
+      <button class="category-btn">Gasfitería</button>
+      <button class="category-btn">Electricidad</button>
+      <button class="category-btn">Carpintería</button>
+    </div>
   </div>
+</section>
 
-
-  <!-- Categories -->
-  <div class="categories">
-    <button class="category-btn">Todos</button>
-    <button class="category-btn">Gasfitería</button>
-    <button class="category-btn">Electricidad</button>
-    <button class="category-btn">Carpintería</button>
+<!-- Publicaciones de Trabajo -->
+<section class="posts-section">
+  <h3 class="section-title">Mira las publicaciones de trabajo</h3>
+  <!-- Filtro de categorías tipo dropdown -->
+  <div class="category-filter">
+    <select [(ngModel)]="categoriaSeleccionada" (change)="filtrarPorCategoria()" class="category-dropdown">
+      <option value="">Todas las categorías</option>
+      <option *ngFor="let categoria of categorias" [value]="categoria.nombreCategoria">{{ categoria.nombreCategoria }}</option>
+    </select>
   </div>
-
-  <!-- Lista de Trabajos -->
+  <p>Total trabajos: {{ trabajos.length }}</p>
+  <p>Total filtrados: {{ trabajosFiltrados.length }}</p>
   <div class="posts">
     <div class="trabajo-card" *ngFor="let trabajo of trabajos">
-      <div class="trabajo-header">
-        <img [src]="" alt="Profile" class="profile-img">
-        <div>
-          <p class="name">{{ trabajo.usuario.nombre }}</p>
-          <p class="category">{{ trabajo.categoria.nombreCategoria }}</p>
+      <img *ngIf="trabajo.imagen" [src]="trabajo.imagen" alt="Trabajo Image" class="trabajo-img-card">
+      <div class="trabajo-card-body">
+        <div class="trabajo-card-header">
+          <div class="trabajo-card-user">
+            <img [src]="'../../../../assets/image/usuarioregistrado.png'" alt="Profile" class="profile-img-card">
+            <span class="trabajo-card-username">{{ trabajo.usuario.nombre }}</span>
+          </div>
+          <!-- Agregar el botón de eliminar -->
+          <button class="delete-btn" (click)="eliminarTrabajo(trabajo.id_trabajo)">Eliminar</button>
+          
         </div>
+        <h4 class="trabajo-card-title">{{ trabajo.titulo }}</h4>
+        <p class="trabajo-card-detail">{{ trabajo.detalle }}</p>
+        <button class="ver-btn">Ver</button>
       </div>
-      <p class="titulo">{{ trabajo.titulo }}</p>
-      <p class="detalle">{{ trabajo.detalle }}</p>
-      <img *ngIf="trabajo.imagen" [src]="" alt="Trabajo Image" class="trabajo-img">
-      <p class="time">19/11/2024</p>
     </div>
   </div>
-  <!-- ORIGINAL -->
+</section>
 
-  <!-- Floating Button -->
-  <div class="floating-btn">
-    <button class="add-btn" (click)="openModal()">
+<!-- Floating Button -->
+<div class="floating-btn">
+  <button class="add-btn" (click)="openModal()">
     <i class="fa-solid fa-plus"></i>
-    </button>
-  </div>
+  </button>
+</div>
 
-  <!-- Modal para Nueva Publicación de Trabajo -->
-  <div class="modal" *ngIf="isModalOpen">
-    <div class="modal-content">
-      <span class="close-btn" (click)="closeModal()">&times;</span>
-      <h2>Crear Nueva Publicación de Trabajo</h2>
-      <h3>de </h3>
-      <div class="modal-body">
-
-        Seleccionar Usuario
-        <select [(ngModel)]="nuevoTrabajo.usuario.id_usuario" class="user-select" required>
-          <option [ngValue]="null" disabled>Seleccionar Usuario</option>
-          <option *ngFor="let usuario of usuarios" [ngValue]="usuario.id_usuario">
-            {{ usuario.nombre }}
-          </option>
-        </select>
-
-
-        <input type="text" placeholder="Titulo del Trabajo" [(ngModel)]="nuevoTrabajo.titulo" class="input-field"
-          required />
-
-        <!-- DETALLE -->
-        <input type="text" placeholder="detalle del Trabajo" [(ngModel)]="nuevoTrabajo.detalle" class="input-field"
-          required /> 
-
-
-
-        <!-- Seleccionar Categoría -->
-        <select [(ngModel)]="nuevoTrabajo.categoria.id_categoria" class="category-select" required>
-          <option [ngValue]="null" disabled>Seleccionar Categoría</option>
-          <option *ngFor="let categoria of categorias" [ngValue]="categoria.id_categoria">
-            {{ categoria.nombreCategoria }}
-          </option>
-        </select>
-
-        <button class="publish-btn" (click)="publicarTrabajo()">Publicar</button>
-      </div>
+<!-- Modal para Nueva Publicación de Trabajo -->
+<div class="modal" *ngIf="isModalOpen">
+  <div class="modal-content">
+    <span class="close-btn" (click)="closeModal()">&times;</span>
+    <h2>Crear Nueva Publicación de Trabajo</h2>
+    <div class="modal-body">
+      <label>Seleccionar Usuario</label>
+      <select [(ngModel)]="nuevoTrabajo.usuario.id_usuario" class="user-select" required>
+        <option [ngValue]="null" disabled>Seleccionar Usuario</option>
+        <option *ngFor="let usuario of usuarios" [ngValue]="usuario.id_usuario">
+          {{ usuario.nombre }}
+        </option>
+      </select>
+      <input type="text" placeholder="Título del Trabajo" [(ngModel)]="nuevoTrabajo.titulo" class="input-field" required />
+      <input type="text" placeholder="Detalle del Trabajo" [(ngModel)]="nuevoTrabajo.detalle" class="input-field" required />
+      <label>Seleccionar Categoría</label>
+      <select [(ngModel)]="nuevoTrabajo.categoria.id_categoria" class="category-select" required>
+        <option [ngValue]="null" disabled>Seleccionar Categoría</option>
+        <option *ngFor="let categoria of categorias" [ngValue]="categoria.id_categoria">
+          {{ categoria.nombreCategoria }}
+        </option>
+      </select>
+      <button class="publish-btn" (click)="publicarTrabajo()">Publicar</button>
     </div>
   </div>
-<!-- ORIGINAL -->
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-links">
+      <a>Ayuda</a>
+      <a>Sobre nosotros</a>
+      <a>Servicio</a>
+      <a>Contactos</a>
+    </div>
+    <div class="footer-app">
+      <h3>Descarga nuestra app</h3>
+      <p>Si quieres postular a un trabajo descarga nuestra aplicación para Play Store y App Store</p>
+      <div class="app-buttons">
+        <img src="../../../assets/image/google-play-badge.png" alt="Google Play" class="app-badge">
+        <img src="../../../assets/image/app-store-badge.png" alt="App Store" class="app-badge">
+      </div>
+    </div>
+    <div class="footer-social">
+      <i class="fa-brands fa-facebook"></i>
+      <i class="fa-brands fa-instagram"></i>
+      <i class="fa-brands fa-facebook-messenger"></i>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <a>Terms</a>
+    <a>Privacidad</a>
+    <a>Condiciones</a>
+  </div>
+</footer>

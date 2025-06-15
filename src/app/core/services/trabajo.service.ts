@@ -35,4 +35,14 @@ export class TrabajoService {
   buscarTrabajos(keyword: string): Observable<Trabajo[]> {
   return this.http.get<Trabajo[]>(`${this.apiUrl}/trabajo/buscar?keyword=${keyword}`);
   }
+
+  // //FILTRO POR CATEGORIA
+  // filtrarPorCategoria(id_categoria: number): Observable<Trabajo[]> {
+  // return this.http.get<Trabajo[]>(`${this.apiUrl}/trabajo/categoria/${id_categoria}`);
+  // }
+
+  // Método para eliminar trabajo
+  eliminarTrabajo(id: number): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/trabajo/borrar/${id}`);
+  }
 }

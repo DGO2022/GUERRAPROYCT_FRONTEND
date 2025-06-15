@@ -15,8 +15,10 @@ import { Router } from '@angular/router'; //
 export class HomeComponent implements OnInit {
   keyword: string = '';
   trabajos: Trabajo[] = [];
+  trabajosFiltrados: Trabajo[] = [];
   categorias: Categoria[] = [];
   usuarios: Usuario[] = [];
+  categoriaSeleccionada: string = '';
   isModalOpen: boolean = false;
   isMenuOpen: boolean = false;
   isNotificationsOpen = false; // Estado de las notificaciones
@@ -88,6 +90,7 @@ export class HomeComponent implements OnInit {
     this.trabajoService.listarTrabajos().subscribe(
       (data) => {
         this.trabajos = data;
+        this.filtrarPorCategoria();
       },
       (error) => {
         console.error('Error al listar trabajos', error);
@@ -146,21 +149,42 @@ export class HomeComponent implements OnInit {
     this.isNotificationsOpen = !this.isNotificationsOpen;
   }
 
-//METODO PARA BUSCAR TRABAJO CON BUSCADOR
- buscarTrabajos(): void {
-   if (this.keyword.trim() === '') {
-     this.listarTrabajos(); // Trae todos si el campo está vacío
-   } else {
-     this.trabajoService.buscarTrabajos(this.keyword.trim()).subscribe(
-       (data) => {
-         this.trabajos = data; // Aquí se asigna la lista filtrada
-       },
-       (error) => {
-         console.error('Error al buscar trabajos', error);
-       }
-     );
-   }
- }
+  // Filtrar trabajos por categoría seleccionada
+  filtrarPorCategoria(): void {
+    if (!this.categoriaSeleccionada || this.categoriaSeleccionada === '') {
+      this.trabajosFiltrados = this.trabajos;
+    } else {
+      this.trabajosFiltrados = this.trabajos.filter(trabajo => trabajo.categoria && trabajo.categoria.nombreCategoria === this.categoriaSeleccionada);
+    }
+  }
 
+  //METODO PARA BUSCAR TRABAJO CON BUSCADOR
+  buscarTrabajos(): void {
+    if (this.keyword.trim() === '') {
+      this.listarTrabajos(); // Trae todos si el campo está vacío
+    } else {
+      this.trabajoService.buscarTrabajos(this.keyword.trim()).subscribe(
+        (data) => {
+          this.trabajos = data; // Aquí se asigna la lista filtrada
+          this.filtrarPorCategoria();
+        },
+        (error) => {
+          console.error('Error al buscar trabajos', error);
+        }
+      );
+    }
+  }
 
+  // Método para eliminar un trabajo
+eliminarTrabajo(id_trabajo: number): void {
+  this.trabajoService.eliminarTrabajo(id_trabajo).subscribe(
+    (response) => {
+      console.log('Trabajo eliminado exitosamente:', response);
+      this.listarTrabajos(); // Actualizar la lista de trabajos después de la eliminación
+    },
+    (error) => {
+      console.error('Error al eliminar trabajo', error);
+    }
+  );
+}
 }
